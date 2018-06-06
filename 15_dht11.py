@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#DTH-11-Temp and Humidity
+# DTH-11-Temp and Humidity
 
 import RPi.GPIO as GPIO
 import time
@@ -21,30 +21,30 @@ GPIO.output(channel, GPIO.HIGH)
 GPIO.setup(channel, GPIO.IN)
 
 while GPIO.input(channel) == GPIO.LOW:
-	continue
+    continue
 
 while GPIO.input(channel) == GPIO.HIGH:
-	continue
+    continue
 
 while j < 40:
-	k = 0
-	while GPIO.input(channel) == GPIO.LOW:
-		continue
+    k = 0
+    while GPIO.input(channel) == GPIO.LOW:
+        continue
 
-	while GPIO.input(channel) == GPIO.HIGH:
-		k += 1
-		if k > 100:
-			break
+    while GPIO.input(channel) == GPIO.HIGH:
+        k += 1
+        if k > 100:
+            break
 
-	if k < 8:
-		data.append(0)
-	else:
-		data.append(1)
+    if k < 8:
+        data.append(0)
+    else:
+        data.append(1)
 
-	j += 1
+    j += 1
 
-print ("sensor is working.")
-print (data)
+print("sensor is working.")
+print(data)
 
 humidity_bit = data[0:8]
 humidity_point_bit = data[8:16]
@@ -59,18 +59,19 @@ temperature_point = 0
 check = 0
 
 for i in range(8):
-	humidity += humidity_bit[i] * 2 ** (7 - i)
-	humidity_point += humidity_point_bit[i] * 2 ** (7 - i)
-	temperature += temperature_bit[i] * 2 ** (7 - i)
-	temperature_point += temperature_point_bit[i] * 2 ** (7 - i)
-	check += check_bit[i] * 2 ** (7 - i)
+    humidity += humidity_bit[i] * 2 ** (7 - i)
+    humidity_point += humidity_point_bit[i] * 2 ** (7 - i)
+    temperature += temperature_bit[i] * 2 ** (7 - i)
+    temperature_point += temperature_point_bit[i] * 2 ** (7 - i)
+    check += check_bit[i] * 2 ** (7 - i)
 
 tmp = humidity + humidity_point + temperature + temperature_point
 
 if check == tmp:
-	print ("temperature : ", temperature *9/5 + 32, "deg F, humidity : " , humidity)
+    print("temperature : ", temperature * 9 / 5 + 32, "deg F, humidity : ", humidity)
 else:
-	print ("wrong")
-	print ("temperature : ", temperature *9/5 + 32, "def F, humidity : " , humidity, " check : ", check, " tmp : ", tmp)
+    print("wrong")
+    print("temperature : ", temperature * 9 / 5 + 32, "def F, humidity : ", humidity, " check : ", check, " tmp : ",
+          tmp)
 
 GPIO.cleanup()
